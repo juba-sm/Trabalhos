@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    // Tabuleiro 8x8 (padrao do xadrez)
+    char tabuleiro[8][8];
+    int i, j;
+    // Posicao inicial da Torre (linha 0, coluna 0)
+    int linha_atual = 0;
+    int col_atual = 0;
+    // Para onde o jogador quer ir
+    int linha_dest, col_dest;
+    int jogando = 1;
+
+    printf("=== TREINO DE XADREZ: A TORRE ===\n");
+    printf("A Torre (T) so anda na horizontal ou vertical.\n");
+
+    while(jogando == 1) {
+        
+        // 1. Limpa e desenha o tabuleiro
+        // Preenche tudo com pontinhos
+        for(i = 0; i < 8; i++) {
+            for(j = 0; j < 8; j++) {
+                tabuleiro[i][j] = '.';
+            }
+        }
+        // Coloca a Torre na posicao atual
+        tabuleiro[linha_atual][col_atual] = 'T';
+
+        // Imprime na tela
+        printf("\n   0 1 2 3 4 5 6 7\n"); // Numeros das colunas
+        for(i = 0; i < 8; i++) {
+            printf("%d  ", i); // Numero da linha
+            for(j = 0; j < 8; j++) {
+                printf("%c ", tabuleiro[i][j]);
+            }
+            printf("\n");
+        }
+
+        // 2. Pergunta o movimento
+        printf("\nSua posicao atual: [%d, %d]", linha_atual, col_atual);
+        printf("\nPara sair digite: -1 -1");
+        printf("\nDigite nova Linha e Coluna: ");
+        scanf("%d %d", &linha_dest, &col_dest);
+
+        // Opcao para sair do jogo
+        if(linha_dest == -1) {
+            jogando = 0;
+            continue;
+        }
+
+        // 3. Validacoes (A parte importante pro professor)
+        
+        // Verifica se saiu do tabuleiro
+        if(linha_dest < 0 || linha_dest > 7 || col_dest < 0 || col_dest > 7) {
+            printf("\nERRO: Voce caiu do tabuleiro! Tente entre 0 e 7.\n");
+            // Pausa gambiarra para dar tempo de ler
+            printf("Pressione ENTER...");
+            getchar(); getchar(); 
+            continue;
+        }
+
+        // Lógica da Torre:
+        // Ou a linha continua a mesma (movimento horizontal)
+        // Ou a coluna continua a mesma (movimento vertical)
+        if(linha_dest == linha_atual || col_dest == col_atual) {
+            // Se for valido, atualiza a posicao
+            linha_atual = linha_dest;
+            col_atual = col_dest;
+            printf("\nMovimento realizado!\n");
+        } else {
+            printf("\nERRO: Movimento invalido para a Torre!\n");
+            printf("Ela so anda em linha reta (cruz).\n");
+            printf("Pressione ENTER...");
+            getchar(); getchar();
+        }
+    }
+
+    printf("\nFim de jogo.\n");
+    return 0;
+}
