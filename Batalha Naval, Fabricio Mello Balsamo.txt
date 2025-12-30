@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+    // Mapa de 10x10
+    char mapa[10][10];
+    int i, j;
+    int linha, coluna;
+    int pontos = 0;
+    int total_navios = 5;
+
+    // Inicializa o gerador de numeros aleatorios
+    srand(time(NULL));
+
+    // 1. Preenche o mapa com agua (~)
+    for(i = 0; i < 10; i++) {
+        for(j = 0; j < 10; j++) {
+            mapa[i][j] = '~';
+        }
+    }
+
+    // 2. Coloca os navios aleatoriamente
+    for(i = 0; i < total_navios; i++) {
+        linha = rand() % 10;
+        coluna = rand() % 10;
+        
+        // Se ja tiver navio, tenta de novo na mesma posicao do loop (i--)
+        if(mapa[linha][coluna] == 'N') {
+            i--; 
+        } else {
+            mapa[linha][coluna] = 'N';
+        }
+    }
+
+    printf("=== Batalha Naval ===\n");
+    printf("Tente derrubar os %d navios!\n", total_navios);
+
+    // 3. Loop principal do jogo
+    while(pontos < total_navios) {
+        
+        // Imprime o cabecalho das colunas
+        printf("\n   0 1 2 3 4 5 6 7 8 9\n");
+        
+        // Imprime o tabuleiro
+        for(i = 0; i < 10; i++) {
+            printf("%d  ", i); // Numero da linha
+            for(j = 0; j < 10; j++) {
+                // Se for navio, mostra agua para esconder
+                if(mapa[i][j] == 'N') {
+                    printf("~ "); 
+                } else {
+                    printf("%c ", mapa[i][j]);
+                }
+            }
+            printf("\n");
+        }
+
+        // Leitura da jogada
+        printf("\nDigite linha e coluna (0-9): ");
+        scanf("%d %d", &linha, &coluna);
+
+        // Verifica se a coordenada eh valida
+        if(linha < 0 || linha > 9 || coluna < 0 || coluna > 9) {
+            printf("Posicao invalida! Tente de 0 a 9.\n");
+            continue;
+        }
+
+        // Verifica o que atingiu
+        if(mapa[linha][coluna] == 'N') {
+            printf("\nBOMBA! Voce acertou um navio!\n");
+            mapa[linha][coluna] = 'X'; // X marca o acerto
+            pontos++;
+            printf("Faltam %d navios.\n", total_navios - pontos);
+        }
+        else if(mapa[linha][coluna] == '~') {
+            printf("\nAgua! Voce errou.\n");
+            mapa[linha][coluna] = '*'; // * marca o erro
+        }
+        else {
+            printf("\nVoce ja atirou ai antes.\n");
+        }
+    }
+
+    printf("\nPARABENS! Voce venceu o jogo.\n");
+    
+    return 0;
+}
